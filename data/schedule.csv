@@ -1,0 +1,52 @@
+﻿,Day/Date,SAP Order ID,Material Description,Routing Time (min),Technician Matricule,Technician Name,Status,Remaining Time,Remark
+0,2024-07-01,500392949,"BPA B0201844,ANW DRX736",720,4033461,Chnini Mosbah,In Progress,240,Technician working time exhausted
+1,2024-07-01,500582706,"BPA B0202678,8B004256,B01,G02,G05 DRX737",700,4041567,Ferhi Hechmi,In Progress,220,Technician working time exhausted
+2,2024-07-01,500483282,"BPA B0013725,8B002717/21,B01,G02 DRX736",700,4033366,Ouni Mondher,In Progress,220,Technician working time exhausted
+3,2024-07-01,500518358,"PA G1120007,G0003352,Üb.1mm DRX 310_F",450,4049911,Laiter Houdaifa,Completed,0,
+4,2024-07-01,500530788,"PA B0101854,A4512713_S8100098,SV DRX310F",450,4049911,Laiter Houdaifa,In Progress,420,Technician working time exhausted
+5,2024-07-01,500447310,"BPA B0013725,8B002717,2XG0211021 DRX736",450,4049756,Ben brahim Maha,Completed,0,
+6,2024-07-01,500498090,"PA G0821141,DA,2 Stuffen DRX310_F",440,4049756,Ben brahim Maha,In Progress,410,Technician working time exhausted
+7,2024-07-01,500331148,"PA G1521006,G1521007/009,DA,Üb.1mmDRX310",430,4048075,Zmerli Zied,Completed,0,
+8,2024-07-01,500473303,"BPA B0010285,8B001724,B01,G02,E06 DRX737",424,4048075,Zmerli Zied,In Progress,374,Technician working time exhausted
+9,2024-07-01,500328535,"PA G0821108,ANW CPA,DA DRX310",420,4046776,Jaziri Marwen,Completed,0,
+10,2024-07-01,500202609,"PA B0101201,MB DRX310",408,4046776,Jaziri Marwen,In Progress,348,Technician working time exhausted
+11,2024-07-01,500448968,PA 8B002717 DRX310_Muster,400,4048076,Mdaini Sami,In Progress,40,Technician working time exhausted
+12,2024-07-01,500490741,"BPA G3222023/4,G0002485,D,Fork DRX736",300,4050046,Mansour Iheb,Completed,0,
+13,2024-07-01,500470852,"BPA B0201876,B0201927,G16,G14,G04 DRX737",300,4050046,Mansour Iheb,In Progress,120,Technician working time exhausted
+14,2024-07-01,500315083,"Ansambl.1corp 8B001041,G0002257,T0200354",300,4050045,Yousfi Ameni,Completed,0,
+15,2024-07-01,500551893,"BPA B0202715,G0421363,T0300048 DRX737",300,4050045,Yousfi Ameni,In Progress,120,Technician working time exhausted
+16,2024-07-01,500469526,"BPA G6422007,G0002485 p.44 fork DRX736",300,4050026,Naili Hosni,Completed,0,
+17,2024-07-01,500429270,"BPA B0201876/927,2xG16,G04,G14,G0 DRX736",260,4050026,Naili Hosni,In Progress,80,Technician working time exhausted
+18,2024-07-01,500375202,"PA 5G0955665,Durchfluss,Empf,DA DRX390",255,4050108,Laameri Med amine,Completed,0,
+19,2024-07-01,500360403,"PA 4N0973125,4N0959655 DRX316",250,4050108,Laameri Med amine,In Progress,95,Technician working time exhausted
+20,2024-07-01,500569830,#_Add-on lower frame 12R_R_Y_3S,107,4042838,Mbedra walid,Completed,0,
+21,2024-07-01,500569828,#_Add-on lower frame 12R_L_Y_3S,107,4042838,Mbedra walid,Completed,0,
+22,2024-07-01,500550811," BPA B0202056,H=125mm DRX737",60,4042838,Mbedra walid,Completed,0,
+23,2024-07-01,500205279," BPA G0621272,DA DRX731",38,4042838,Mbedra walid,Completed,0,
+24,2024-07-01,500230041,PA G0421131+SV DRX310,36,4042838,Mbedra walid,Completed,0,
+25,2024-07-01,500206455," BPA G0811010,B0002564,B DRX731",35,4042838,Mbedra walid,Completed,0,
+26,2024-07-01,500332931," A Doppel 2xZ2100250,SU DRX310",33,4042838,Mbedra walid,Completed,0,
+27,2024-07-01,500178937,PA Z2100315 DRX310_F,25,4042838,Mbedra walid,Completed,0,
+28,2024-07-01,500218527," BPA 6Q0035576D,B,ANW DRX731",25,4042838,Mbedra walid,Completed,0,
+29,2024-07-01,500226444," BPA Kabelgabel Abfrage Abgriff,U DRX733",20,4042838,Mbedra walid,Completed,0,
+30,2024-07-01,500230642," BPA Z2100426,U DRX733",20,4042838,Mbedra walid,In Progress,6,Technician working time exhausted
+31,2024-07-01,500226777," MA B0101184,A",15,4050109,Ammar Salah,Completed,0,
+32,2024-07-01,500159854," BPA Z2100212,U DRX735",15,4050109,Ammar Salah,Completed,0,
+33,2024-07-01,500585677,#_Fixation clamp_MFB_HSB_one_TEOC-902,11.16,4050109,Ammar Salah,Completed,0,
+34,2024-07-01,500585726,#_Fixation clamp_MFB_HSB_two_TEOC-902,11.16,4050109,Ammar Salah,Completed,0,
+35,2024-07-01,500461858,_ZusBau_Komax_Omega,10,4050109,Ammar Salah,Completed,0,
+36,2024-07-01,500375653,Placa pt.form.turnare PA dimens.54x85x35,10,4050109,Ammar Salah,Completed,0,
+37,2024-07-01,500563697,_Temporary holder pressure s._ISE20/30A,10,4050109,Ammar Salah,Completed,0,
+38,2024-07-01,500526037,#_ Support_profile_80mm_adjustable,9.3,4050109,Ammar Salah,Completed,0,
+39,2024-07-01,500123449,Forma turnare PA 54x85 vers:01 Y=35mm,5,4050109,Ammar Salah,Completed,0,
+40,2024-07-01,500249399,#_Block Druckprüfung_zusbau,5,4050109,Ammar Salah,Completed,0,
+41,2024-07-01,500369882,"#_Additional block42,5x85_für1Stück_LP_F",4,4050109,Ammar Salah,Completed,0,
+42,2024-07-01,500233748,#_Elevating H18 für PA 63x85,3,4050109,Ammar Salah,Completed,0,
+43,2024-07-01,500457959,#_Connecting rod 85 mm,2,4050109,Ammar Salah,Completed,0,
+44,2024-07-01,500457957,#_Connecting rod 106 mm,2,4050109,Ammar Salah,Completed,0,
+45,2024-07-01,500457958,#_Block Connecting rod 155 mm,2,4050109,Ammar Salah,Completed,0,
+46,2024-07-01,500219857," MA B0201647,A",1,4050109,Ammar Salah,Completed,0,
+47,2024-07-01,500356419,"PA G1521006/07/09/10,B0302577,ü.1 DRX310",700,4049758,Meddeb Karim,In Progress,220,Technician working time exhausted
+48,2024-07-01,500325384,"BPA B0201838,Schnappmutter DRX736",660,4049912,Slama khayreddine,In Progress,180,Technician working time exhausted
+49,2024-07-01,500406641,"BPA B0201838,Schnappmutter DRX737",650,4050129,Maher Hidri,In Progress,170,Technician working time exhausted
+50,2024-07-01,500483286,"BPA B0201844,8B002717/21,B01,G02 DRX736",650,4050109,Ammar Salah,In Progress,285.62000000000006,Technician working time exhausted

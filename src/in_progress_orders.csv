@@ -1,0 +1,18 @@
+Unnamed: 0,Day/Date,SAP Order ID,Material Description,Routing Time (min),Technician Matricule,Technician Name,Status,Remaining Time,Remark
+0,2024-07-01,500392949,"BPA B0201844,ANW DRX736",720.0,4033461,Chnini Mosbah,In Progress,240.0,Technician working time exhausted
+1,2024-07-01,500582706,"BPA B0202678,8B004256,B01,G02,G05 DRX737",700.0,4041567,Ferhi Hechmi,In Progress,220.0,Technician working time exhausted
+2,2024-07-01,500483282,"BPA B0013725,8B002717/21,B01,G02 DRX736",700.0,4033366,Ouni Mondher,In Progress,220.0,Technician working time exhausted
+4,2024-07-01,500530788,"PA B0101854,A4512713_S8100098,SV DRX310F",450.0,4049911,Laiter Houdaifa,In Progress,420.0,Technician working time exhausted
+6,2024-07-01,500498090,"PA G0821141,DA,2 Stuffen DRX310_F",440.0,4049756,Ben brahim Maha,In Progress,410.0,Technician working time exhausted
+8,2024-07-01,500473303,"BPA B0010285,8B001724,B01,G02,E06 DRX737",424.0,4048075,Zmerli Zied,In Progress,374.0,Technician working time exhausted
+10,2024-07-01,500202609,"PA B0101201,MB DRX310",408.0,4046776,Jaziri Marwen,In Progress,348.0,Technician working time exhausted
+11,2024-07-01,500448968,PA 8B002717 DRX310_Muster,400.0,4048076,Mdaini Sami,In Progress,40.0,Technician working time exhausted
+13,2024-07-01,500470852,"BPA B0201876,B0201927,G16,G14,G04 DRX737",300.0,4050046,Mansour Iheb,In Progress,120.0,Technician working time exhausted
+15,2024-07-01,500551893,"BPA B0202715,G0421363,T0300048 DRX737",300.0,4050045,Yousfi Ameni,In Progress,120.0,Technician working time exhausted
+17,2024-07-01,500429270,"BPA B0201876/927,2xG16,G04,G14,G0 DRX736",260.0,4050026,Naili Hosni,In Progress,80.0,Technician working time exhausted
+19,2024-07-01,500360403,"PA 4N0973125,4N0959655 DRX316",250.0,4050108,Laameri Med amine,In Progress,95.0,Technician working time exhausted
+30,2024-07-01,500230642," BPA Z2100426,U DRX733",20.0,4042838,Mbedra walid,In Progress,6.0,Technician working time exhausted
+47,2024-07-01,500356419,"PA G1521006/07/09/10,B0302577,ü.1 DRX310",700.0,4049758,Meddeb Karim,In Progress,220.0,Technician working time exhausted
+48,2024-07-01,500325384,"BPA B0201838,Schnappmutter DRX736",660.0,4049912,Slama khayreddine,In Progress,180.0,Technician working time exhausted
+49,2024-07-01,500406641,"BPA B0201838,Schnappmutter DRX737",650.0,4050129,Maher Hidri,In Progress,170.0,Technician working time exhausted
+50,2024-07-01,500483286,"BPA B0201844,8B002717/21,B01,G02 DRX736",650.0,4050109,Ammar Salah,In Progress,285.62000000000006,Technician working time exhausted
