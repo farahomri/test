@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-#from src.models.update_scheduling import update_schedule
 
 # Function to get the schedule from session state
 def get_schedule():
@@ -62,11 +61,6 @@ def get_order_classification(order_id):
     else:
         return "No classification found for this order ID."
 
-'''def get_available_technicians(working_technicians_file, filter_orders_file, output_file):
-    updated_technicians = update_schedule(working_technicians_file, filter_orders_file, output_file)
-    available_technicians = updated_technicians[updated_technicians['Working Time'] > 0]
-    return available_technicians['Technician Name'].tolist()'''
-
 def get_technician_classification(technician_id):
     technicians_file = '../data/technicians_file.csv'
     technicians = pd.read_csv(technicians_file)
@@ -84,15 +78,13 @@ def count_completed_orders():
     else:
         return "No schedule data available."
 
+# Intent dictionary mapping intent names to functions
 intents = {
     "assigned_technician": get_assigned_technician,
     "order_status": get_order_status,
     "list_orders_by_technician": list_orders_by_technician,
     "count_in_progress_orders": count_in_progress_orders,
     "order_classification": get_order_classification,
-    #"available_technicians": get_available_technicians,
     "technician_classification": get_technician_classification,
     "completed_orders": count_completed_orders,
 }
-
-#%%

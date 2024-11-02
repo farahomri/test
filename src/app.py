@@ -4,12 +4,39 @@ from collections import Counter
 import streamlit as st
 import pandas as pd
 from models.orders import load_orders, add_order, modify_order, delete_order
-from chatbot.chatbot import handle_user_input
+from chatbot.chatbot_functions import handle_user_input
 from models.initial_scheduling import find_missing_sap_numbers, merge_orders_with_class_code, calculate_working_time, create_initial_schedule, remove_scheduled_orders, reassign_blocked_order
 from models.technicians import load_technicians, save_technicians, add_technician, modify_technician, delete_technician
 from models.reclamations import load_reclamations, add_reclamation, modify_reclamation, delete_reclamation
 from models.update_scheduling import filter_orders_by_status_update,get_unscheduled_orders, update_schedule, assign_orders_with_exceptions, final_update, reassign_blocked_order_update
 
+VALID_CREDENTIALS = {
+    "admin": "password123",
+    "user": "userpassword"
+}
+def login():
+    """Handles user authentication."""
+    if 'logged_in' not in st.session_state:
+        st.session_state['logged_in'] = False
+
+    if not st.session_state['logged_in']:
+        st.header("Login")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type="password")
+        if st.button("Login"):
+            if username in VALID_CREDENTIALS and VALID_CREDENTIALS[username] == password:
+                st.session_state['logged_in'] = True
+                st.success("Logged in successfully!")
+                st.experimental_rerun()  # Refresh the page after successful login
+            else:
+                st.error("Invalid username or password. Please try again.")
+        return False  # Return False to indicate not logged in
+    return True  # Return True to indicate successful login
+
+def logout():
+    """Logs out the user and clears the session."""
+    st.session_state['logged_in'] = False
+    st.experimental_rerun()
 
 
 
@@ -244,20 +271,28 @@ def initial_scheduling_and_manage_blocked_orders():
 
     st.subheader("Initial Scheduling")
 
-    uploaded_orders = st.file_uploader("Upload Orders File", type=['xlsx'])
-    uploaded_shifts = st.file_uploader("Upload Shifts File", type=['xlsx'])
-    products_classified_path = '../data/products_classified.csv'
-    technicians_file_path = '../data/technicians_file.csv'
-    blocked_orders_file_path = '../data/blocked_orders.csv'
+    # Ensure the schedule is persistent between page navigation
+    if 'initial_schedule_df' not in st.session_state:
+        st.session_state['initial_schedule_df'] = None
+    if 'unscheduled_orders_df' not in st.session_state:
+        st.session_state['unscheduled_orders_df'] = None
+    if 'merged_orders' not in st.session_state:
+        st.session_state['merged_orders'] = None
 
-    if 'schedule_df' not in st.session_state:
-        st.session_state['schedule_df'] = None
+    # Only allow new file upload if no previous schedule exists, or if users want to replace it
+    uploaded_orders = st.file_uploader("Upload Orders File", type=['xlsx'], key="initial_orders")
+    uploaded_shifts = st.file_uploader("Upload Shifts File", type=['xlsx'], key="initial_shifts")
 
     if uploaded_orders and uploaded_shifts:
+        # Load the new orders and shifts data
         orders_df = pd.read_excel(uploaded_orders)
         shifts_df = pd.read_excel(uploaded_shifts)
 
+        # Process the data as before
+        products_classified_path = '../data/products_classified.csv'
+        technicians_file_path = '../data/technicians_file.csv'
         products_classified_df = pd.read_csv(products_classified_path)
+
         missing_sap_numbers = find_missing_sap_numbers(orders_df, products_classified_df)
         if missing_sap_numbers:
             st.stop()
@@ -266,17 +301,19 @@ def initial_scheduling_and_manage_blocked_orders():
         working_technicians = calculate_working_time(technicians_file_path, shifts_df)
 
         schedule_df, technicians_with_classification = create_initial_schedule(working_technicians, merged_orders)
+
+        # Store the schedule and related data in session state
+        st.session_state['initial_schedule_df'] = schedule_df
+        st.session_state['unscheduled_orders_df'] = remove_scheduled_orders(schedule_df, merged_orders)
+        st.session_state['merged_orders'] = merged_orders
+
         st.write("Initial Schedule")
         st.dataframe(schedule_df)
 
-        if 'scheduled_orders_set' not in st.session_state:
-            st.session_state['scheduled_orders_set'] = set()
-        st.session_state['scheduled_orders_set'].update(schedule_df['SAP'])
-
-        unscheduled_orders_df = remove_scheduled_orders(schedule_df, merged_orders)
-        st.session_state['schedule_df'] = schedule_df
-        st.session_state['unscheduled_orders_df'] = unscheduled_orders_df
-        st.session_state['merged_orders'] = merged_orders
+    # If schedule already exists in session state, show it
+    elif st.session_state['initial_schedule_df'] is not None:
+        st.write("Initial Schedule (from session)")
+        st.dataframe(st.session_state['initial_schedule_df'])
 
     st.subheader("Reassign Blocked Orders")
 
@@ -340,57 +377,66 @@ def initial_scheduling_and_manage_blocked_orders():
 def update_scheduling():
     st.header("Update Scheduling")
 
-    uploaded_shifts = st.file_uploader("Upload Shifts File", type=['xlsx'])
-    uploaded_schedule = st.file_uploader("Upload Schedule File", type=['csv'])
 
-    # Automatically use initial_scheduling if updated_scheduling is not available
+    # Ensure the schedule from the initial scheduling is available
+    if 'initial_schedule_df' not in st.session_state or st.session_state['initial_schedule_df'] is None:
+        st.error("Please complete the initial scheduling first before updating the schedule.")
+        return
+
+    # Ensure the updated schedule is persistent between page navigation
+    if 'updated_schedule_df' not in st.session_state:
+        st.session_state['updated_schedule_df'] = None
+
+    # Shifts file uploader, to trigger an update when new shifts are uploaded
+    uploaded_shifts = st.file_uploader("Upload Shifts File", type=['xlsx'], key="update_shifts")
+
+    # If new shifts file is uploaded, recalculate the schedule
     if uploaded_shifts:
-        if uploaded_schedule:
-            schedule_df = pd.read_csv(uploaded_schedule)
-        else:
-            schedule_df = st.session_state.get('schedule_df')
+        shifts_df = pd.read_excel(uploaded_shifts)
 
-        if schedule_df is not None:
-            orders_df = st.session_state['merged_orders']
-            shifts_df = pd.read_excel(uploaded_shifts)
-            technicians_file_path = '../data/technicians_file.csv'
+        # Use the schedule stored in session state from the initial scheduling page
+        schedule_df = st.session_state['initial_schedule_df']
+        orders_df = st.session_state.get('merged_orders')
+        technicians_file_path = '../data/technicians_file.csv'
 
-            # Calculate working time
-            working_technicians = calculate_working_time(technicians_file_path, shifts_df)
+        # Calculate working time
+        working_technicians = calculate_working_time(technicians_file_path, shifts_df)
 
-            # Filter orders by status
-            in_progress_orders = filter_orders_by_status_update(schedule_df)
+        # Filter orders by status
+        in_progress_orders = filter_orders_by_status_update(schedule_df)
 
-            # Maintain initial unscheduled orders
-            if 'unscheduled_orders_df' not in st.session_state:
-                st.session_state['unscheduled_orders_df'] = orders_df.copy()
+        # Maintain initial unscheduled orders
+        if 'unscheduled_orders_df' not in st.session_state:
+            st.session_state['unscheduled_orders_df'] = orders_df.copy()
 
-            # Update schedule
-            new_schedule, updated_working_technicians, assigned_orders_ids, updated_unscheduled_orders_df = update_schedule(
-                working_technicians, in_progress_orders, st.session_state['unscheduled_orders_df']
-            )
+        # Update schedule
+        new_schedule, updated_working_technicians, assigned_orders_ids, updated_unscheduled_orders_df = update_schedule(
+            working_technicians, in_progress_orders, st.session_state['unscheduled_orders_df']
+        )
 
-            # Assign orders with exceptions
-            schedule_with_exceptions, unscheduled_orders, assigned_orders_ids = assign_orders_with_exceptions(
-                updated_working_technicians, updated_unscheduled_orders_df
-            )
+        # Assign orders with exceptions
+        schedule_with_exceptions, unscheduled_orders, assigned_orders_ids = assign_orders_with_exceptions(
+            updated_working_technicians, updated_unscheduled_orders_df
+        )
 
-            # Final update
-            final_schedule = final_update(new_schedule, schedule_with_exceptions)
-            st.write("Final Updated Schedule")
-            st.dataframe(final_schedule)
+        # Final update
+        final_schedule = final_update(new_schedule, schedule_with_exceptions)
 
-            # Update the unscheduled orders
-            final_unscheduled_orders = get_unscheduled_orders(st.session_state['unscheduled_orders_df'], final_schedule)
+        # Store the updated schedule in session state
+        st.session_state['updated_schedule_df'] = final_schedule
+        st.session_state['unscheduled_orders_df'] = unscheduled_orders
 
-            # Save the schedule and unscheduled orders for reassignment
-            st.session_state['schedule_df'] = final_schedule
-            st.session_state['unscheduled_orders_df'] = final_unscheduled_orders
-        else:
-            st.error("Please upload the orders file in the Initial Scheduling page first.")
+        # Display the updated schedule
+        st.write("Final Updated Schedule")
+        st.dataframe(final_schedule)
+
+    # If no new shifts file is uploaded, display the existing updated schedule from session state
+    elif st.session_state['updated_schedule_df'] is not None:
+        st.write("Final Updated Schedule (from session)")
+        st.dataframe(st.session_state['updated_schedule_df'])
+
     else:
-        st.info("Please upload the shifts file.")
-
+        st.info("Please upload the shifts file to proceed with schedule updates.")
     st.subheader("Reassign Blocked Orders")
 
     sap_number = st.text_input("SAP Order Number")
@@ -431,41 +477,17 @@ questions = {
 }
 
 # Function to handle chatbot interaction
+
 def chatbot():
     st.header("Chatbot")
+    user_input = st.text_area("Ask me anything (e.g., 'Who is assigned to order 123456?')")
 
-    # Display a dropdown for predefined questions
-    question = st.selectbox("Choose a question:", list(questions.keys()))
-
-    # Provide input fields based on the selected question
-    if question == "Get Assigned Technician for an Order" or question == "Get Status of an Order":
-        order_id = st.text_input("Enter Order ID")
-        if st.button("Ask"):
-            response = handle_user_input(questions[question], order_id=order_id)
+    if st.button("Ask"):
+        if user_input.strip():
+            response = handle_user_input(user_input)
             st.write(f"Bot: {response}")
-
-    elif question == "List Orders by Technician":
-        technician_id = st.text_input("Enter Technician ID")
-        if st.button("Ask"):
-            response = handle_user_input(questions[question], technician_id=technician_id)
-            st.write(f"Bot: {response}")
-
-    elif question == "Count In Progress Orders" or question == "Count Completed Orders":
-        if st.button("Ask"):
-            response = handle_user_input(questions[question])
-            st.write(f"Bot: {response}")
-
-    elif question == "Get Classification of an Order":
-        order_id = st.text_input("Enter Order ID")
-        if st.button("Ask"):
-            response = handle_user_input(questions[question], order_id=order_id)
-            st.write(f"Bot: {response}")
-
-    elif question == "Get Technician Classification":
-        technician_id = st.text_input("Enter Technician ID")
-        if st.button("Ask"):
-            response = handle_user_input(questions[question], technician_id=technician_id)
-            st.write(f"Bot: {response}")
+        else:
+            st.write("Please enter a question.")
 # Define the path to the products_classified file
 products_classified_path = '../data/products_classified.csv'
 
@@ -537,7 +559,13 @@ def manage_orders():
             st.experimental_rerun()  # Refresh the page to display the updated table
 
 def main():
+    # Authentication page
+    if not login():  # If not logged in, stop the execution
+        return  # Do not show any other content until logged in
+
+    # Show the main application after login
     st.sidebar.title("Navigation")
+    st.sidebar.button("Logout", on_click=logout)
     pages = {
         "Manage Technicians": manage_technicians,
         "Manage Reclamations": manage_reclamations,
@@ -545,7 +573,6 @@ def main():
         "Initial Scheduling ": initial_scheduling_and_manage_blocked_orders,
         "Update Scheduling": update_scheduling,
         "Chatbot": chatbot
-
     }
 
     choice = st.sidebar.radio("Go to", list(pages.keys()))
